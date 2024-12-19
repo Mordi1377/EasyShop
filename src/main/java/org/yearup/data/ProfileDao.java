@@ -13,7 +13,7 @@ public interface ProfileDao
     Profile getByUserId(int id);
 
     // Update an existing profile
-    void update(int userId, Profile profile);
+    Profile update(int userId, Profile profile);
 
 
 }

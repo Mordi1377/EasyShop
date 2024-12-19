@@ -25,40 +25,34 @@ public class ProfileController {
         this.userDao = userDao;
     }
 
-
     @GetMapping()
     @PreAuthorize("permitAll()")
-    public Profile getById(Principal principal)
-    {
-        User user  = userDao.getByUserName(principal.getName());
+    public Profile getById(Principal principal) {
+        User user = userDao.getByUserName(principal.getName());
         System.out.println(user);
 
-        try
-        {
+        try {
             var profile = profileDao.getByUserId(user.getId());
 
             if (profile == null)
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
             return profile;
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             ex.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops...our bas.");
         }
 
     }
 
-//    @PutMapping("/{id}")
-//    public Profile updateProfile(@PathVariable int id, @Valid @RequestBody Profile profile) {
-//        profile.setUserId(id); // Ensure the ID is consistent
-//        return profileDao.update(profile);
-//    }
-//
-//    @PostMapping
-//    public Profile createProfile(@Valid @RequestBody Profile profile) {
-//        return profileDao.create(profile);
-//    }
-
+    @PutMapping("/{id}")
+    public Profile updateProfile(@PathVariable int id, @Valid @RequestBody Profile profile) {
+        try {
+            profile.setUserId(id);
+            return profileDao.update(id, profile);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to update the profile.");
+        }
+    }
 }

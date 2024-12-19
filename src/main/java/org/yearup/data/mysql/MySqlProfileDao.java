@@ -1,15 +1,18 @@
 package org.yearup.data.mysql;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.yearup.models.Profile;
 import org.yearup.data.ProfileDao;
-
 import javax.sql.DataSource;
 import java.sql.*;
-import java.util.Optional;
+
 
 @Component
 public class MySqlProfileDao extends MySqlDaoBase implements ProfileDao {
+    private static final Logger logger = LoggerFactory.getLogger(MySqlProfileDao.class);
+
     public MySqlProfileDao(DataSource dataSource) {
         super(dataSource);
     }
@@ -76,10 +79,9 @@ public class MySqlProfileDao extends MySqlDaoBase implements ProfileDao {
     }
 
 
-
     @Override
 
-    public void update(int userId, Profile profile) {
+    public Profile update(int userId, Profile profile) {
         String sql = "UPDATE profiles SET first_name = ?, last_name = ?, phone = ?, email = ?, address = ?, city = ?, state = ?, zip = ? " +
                 "WHERE user_id = ?";
 
@@ -95,9 +97,15 @@ public class MySqlProfileDao extends MySqlDaoBase implements ProfileDao {
             ps.setString(8, profile.getZip());
             ps.setInt(9, userId);
 
-            ps.executeUpdate();
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new RuntimeException("No profile found for user ID: " + userId);
+            }
+
+            // Return the updated profile
+            return profile;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error updating profile for user ID: " + userId, e);
         }
     }
 }

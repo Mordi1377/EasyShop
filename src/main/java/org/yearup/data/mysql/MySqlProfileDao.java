@@ -11,7 +11,7 @@ import java.sql.*;
 
 @Component
 public class MySqlProfileDao extends MySqlDaoBase implements ProfileDao {
-    private static final Logger logger = LoggerFactory.getLogger(MySqlProfileDao.class);
+    private static Logger logger = LoggerFactory.getLogger(MySqlProfileDao.class);
 
     public MySqlProfileDao(DataSource dataSource) {
         super(dataSource);
@@ -81,7 +81,7 @@ public class MySqlProfileDao extends MySqlDaoBase implements ProfileDao {
 
     @Override
 
-    public Profile update(int userId, Profile profile) {
+    public void update(int userId, Profile profile) {
         String sql = "UPDATE profiles SET first_name = ?, last_name = ?, phone = ?, email = ?, address = ?, city = ?, state = ?, zip = ? " +
                 "WHERE user_id = ?";
 
@@ -101,9 +101,6 @@ public class MySqlProfileDao extends MySqlDaoBase implements ProfileDao {
             if (rowsAffected == 0) {
                 throw new RuntimeException("No profile found for user ID: " + userId);
             }
-
-            // Return the updated profile
-            return profile;
         } catch (SQLException e) {
             throw new RuntimeException("Error updating profile for user ID: " + userId, e);
         }

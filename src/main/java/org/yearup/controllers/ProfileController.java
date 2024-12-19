@@ -45,14 +45,21 @@ public class ProfileController {
 
     }
 
-    @PutMapping("/{id}")
-    public Profile updateProfile(@PathVariable int id, @Valid @RequestBody Profile profile) {
-        try {
-            profile.setUserId(id);
-            return profileDao.update(id, profile);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to update the profile.");
+    @PutMapping()
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+    public void update(@RequestBody Profile profile, Principal principal) {
+        User user = userDao.getByUserName(principal.getName());
+
+        var profile2 = profileDao.getByUserId(user.getId());
+
+        Profile existingProfile = profileDao.getByUserId(user.getId());
+        if (profile2 == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
+        profileDao.update(existingProfile.getUserId(), profile);
     }
 }
+
+
+
+

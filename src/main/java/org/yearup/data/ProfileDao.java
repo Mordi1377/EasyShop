@@ -10,12 +10,10 @@ public interface ProfileDao
 {
     Profile create(Profile profile);
 
-    Optional<Profile> getById(int userId);
+    Profile getByUserId(int id);
 
     // Update an existing profile
-    Profile update(@Valid Profile profile);
+    void update(int userId, Profile profile);
 
-    // Delete a profile by user ID
-    void delete(int userId);
 
 }

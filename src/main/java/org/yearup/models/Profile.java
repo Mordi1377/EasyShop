@@ -16,8 +16,7 @@ public class Profile
     {
     }
 
-    public Profile(int userId, String firstName, String lastName, String phone, String email, String address, String city, String state, String zip)
-    {
+    public Profile(int userId, String firstName, String lastName, String phone, String email, String address, String city, String state, String zip) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -28,7 +27,6 @@ public class Profile
         this.state = state;
         this.zip = zip;
     }
-
     public int getUserId()
     {
 

@@ -8,11 +8,13 @@ import org.springframework.web.server.ResponseStatusException;
 import org.yearup.data.ProfileDao;
 import org.yearup.data.UserDao;
 import org.yearup.models.Profile;
+import org.yearup.models.User;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @RestController
-@RequestMapping("/profiles")
+@RequestMapping("profile")
 @CrossOrigin
 public class ProfileController {
     private ProfileDao profileDao;
@@ -23,26 +25,40 @@ public class ProfileController {
         this.userDao = userDao;
     }
 
+
     @GetMapping()
     @PreAuthorize("permitAll()")
-    public Profile getProfile(@PathVariable int id) {
-        return profileDao.getById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Profile not found"));
+    public Profile getById(Principal principal)
+    {
+        User user  = userDao.getByUserName(principal.getName());
+        System.out.println(user);
+
+        try
+        {
+            var profile = profileDao.getByUserId(user.getId());
+
+            if (profile == null)
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+
+            return profile;
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops...our bas.");
+        }
+
     }
 
-    @PutMapping("/{id}")
-    public Profile updateProfile(@PathVariable int id, @Valid @RequestBody Profile profile) {
-        profile.setUserId(id); // Ensure the ID is consistent
-        return profileDao.update(profile);
-    }
+//    @PutMapping("/{id}")
+//    public Profile updateProfile(@PathVariable int id, @Valid @RequestBody Profile profile) {
+//        profile.setUserId(id); // Ensure the ID is consistent
+//        return profileDao.update(profile);
+//    }
+//
+//    @PostMapping
+//    public Profile createProfile(@Valid @RequestBody Profile profile) {
+//        return profileDao.create(profile);
+//    }
 
-    @PostMapping
-    public Profile createProfile(@Valid @RequestBody Profile profile) {
-        return profileDao.create(profile);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteProfile(@PathVariable int id) {
-        profileDao.delete(id);
-    }
 }

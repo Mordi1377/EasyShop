@@ -58,6 +58,18 @@ public class ProfileController {
         }
         profileDao.update(existingProfile.getUserId(), profile);
     }
+    @DeleteMapping("{id}")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+    public void deleteProfile(@PathVariable int id) {
+        try{
+            var profile = profileDao.getByUserId(id);
+
+            if(profile == null)
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Ooops... our bad.");
+        }
+    }
 }
 
 

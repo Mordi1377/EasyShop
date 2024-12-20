@@ -52,7 +52,15 @@
 * PUT http://localhost:8080/profile Profile body
 
 ## Screenshoots
+
+### Home Page
 <img width="1503" alt="EasyShop_1st" src="https://github.com/user-attachments/assets/88767a08-bbf0-4cd0-a6b6-6e1b0c9a806b" />
+
+### Login Page
+
+![EasyShop Login](https://github.com/user-attachments/assets/d69f683a-396e-45b5-a7a5-3a773b7a8d1c)
+
+
 
 ![image](https://github.com/user-attachments/assets/028bc8f2-ee33-4b7e-b255-324fede3652a)
 

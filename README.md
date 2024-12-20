@@ -61,9 +61,11 @@
 ![EasyShop Login](https://github.com/user-attachments/assets/d69f683a-396e-45b5-a7a5-3a773b7a8d1c)
 
 
+### User Page 
 
 ![image](https://github.com/user-attachments/assets/028bc8f2-ee33-4b7e-b255-324fede3652a)
 
+### Profile Page
 
 ![image](https://github.com/user-attachments/assets/7c636928-42cf-4db0-b1fc-496f7811128f)
 
